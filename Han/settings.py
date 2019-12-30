@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'o*c4*u%swq+))gqwp(0!yc7n67x*!f#9$xq3#52t5px*mj7zxi'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'hanzi',
+    'hanzi',  # Web app
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -120,3 +121,27 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# LOCAL SETTINGS
+# from .local_settings import *
+
+# log
+import logging
+_g_logger = None
+
+
+def get_logger():
+    global _g_logger
+    if _g_logger is None:
+        logging.basicConfig(filename='my.log')
+        __datetime = "%Y-%m-%d %H:%M:%S"
+        __format_str = "%(asctime)s %(levelname).1s [%(filename)s:%(lineno)s] %(message)s"
+        _g_logger = logging.getLogger()
+        # stream header
+        logging.basicConfig(filename='my.log')  # 制定log文件的存放位置
+        formater = logging.Formatter(__format_str, __datetime)
+        handler = logging.StreamHandler()
+        handler.setFormatter(formater)
+        _g_logger.addHandler(handler)
+        _g_logger.setLevel(logging.DEBUG)
+    return _g_logger
