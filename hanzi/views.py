@@ -58,7 +58,10 @@ class CharactersListView(APIView):
 
 	def get(self, request, format=None):
 		characters = self.get_object()
-		serializer = ChineseCharactersSerializer(characters, many=True)
+		pg = MyPageNumberPagination()
+		# 获取分页的数据
+		pg_ = pg.paginate_queryset(queryset=characters, request=request, view=self)
+		serializer = ChineseCharactersSerializer(pg_, many=True)
 		return Response(serializer.data)
 
 
@@ -76,3 +79,46 @@ class CharactersSearchView(APIView):
 		serializer = ChineseCharactersSerializer(character)
 		return Response(serializer.data)
 
+
+class UpdateView(APIView):
+	def post(self, request, format=None):
+		simplified = request.data.get('simplified')
+		traditional = request.data.get('traditional')
+		allusion = request.data.get('allusion')
+		pinyin = request.data.get('pinyin')
+		img = request.FILES.get('img')
+		if img.size and img.size > 1 * 1024 * 1024:
+			raise ValueError('图片大小不能超过1M')
+		item, created = ChineseCharacters.objects.get_or_create(simplified=simplified)
+		item.traditional = traditional
+		item.allusion = allusion
+		item.pinyin = pinyin
+		item.img_file = request.FILES.get('img')
+		item.img_file = img
+		item.save()
+		return Response({'mg': 'success', 'status': 200})
+
+from django.shortcuts import render
+from hanzi.models import ChineseCharacters
+
+
+def uploadImg(request):
+	if request.method == 'POST':
+		simplified = request.data.get('sim')
+		print(simplified)
+		img = request.FILES.get('img')
+		if img.size and img.size > 1 * 1024 * 1024:
+			raise ValueError('图片大小不能超过1M')
+		img, created = ChineseCharacters.objects.get_or_create(simplified='包')
+		img.img_file = request.FILES.get('img')
+	return render(request, 'uploading.html')
+
+
+def showImg(request):
+	imgs = ChineseCharacters.objects.get(simplified='包')
+	content = {
+		'imgs': imgs,
+	}
+	print(content)
+	print(imgs.img_file)
+	return render(request, 'showing.html', content)

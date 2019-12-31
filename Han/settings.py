@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'o*c4*u%swq+))gqwp(0!yc7n67x*!f#9$xq3#52t5px*mj7zxi'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -61,7 +61,8 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.debug',
+				'django.template.context_processors.media',
+				'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -116,16 +117,19 @@ USE_L10N = True
 
 USE_TZ = True
 
+# 配置 MEDIA_ROOT 作为你上传文件在服务器中的基本路径
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
+MEDIA_URL = '/media/'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-
 STATIC_URL = '/static/'
 
 # LOCAL SETTINGS
 # from .local_settings import *
 
-# log
+# Customer Log
 import logging
 _g_logger = None
 
@@ -145,3 +149,11 @@ def get_logger():
         _g_logger.addHandler(handler)
         _g_logger.setLevel(logging.DEBUG)
     return _g_logger
+
+
+# REST
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
+
