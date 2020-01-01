@@ -82,21 +82,23 @@ class CharactersSearchView(APIView):
 
 class UpdateView(APIView):
 	def post(self, request, format=None):
-		simplified = request.data.get('simplified')
-		traditional = request.data.get('traditional')
-		allusion = request.data.get('allusion')
-		pinyin = request.data.get('pinyin')
-		img = request.FILES.get('img')
-		if img.size and img.size > 1 * 1024 * 1024:
-			raise ValueError('图片大小不能超过1M')
-		item, created = ChineseCharacters.objects.get_or_create(simplified=simplified)
-		item.traditional = traditional
-		item.allusion = allusion
-		item.pinyin = pinyin
-		item.img_file = request.FILES.get('img')
-		item.img_file = img
-		item.save()
-		return Response({'mg': 'success', 'status': 200})
+		try:
+			simplified = request.data.get('simplified')
+			traditional = request.data.get('traditional')
+			allusion = request.data.get('allusion')
+			pinyin = request.data.get('pinyin')
+			item, created = ChineseCharacters.objects.get_or_create(simplified=simplified)
+			item.traditional = traditional
+			item.allusion = allusion
+			item.pinyin = pinyin
+			item.img_file = request.FILES.get('img')
+			if item.size and item.size > 1 * 1024 * 1024:
+				raise ValueError('图片大小不能超过1M')
+			item.save()
+			return Response({'mg': 'success', 'status': 200})
+		except Exception as e:
+			logger('update error ', e)
+			raise Http404
 
 from django.shortcuts import render
 from hanzi.models import ChineseCharacters
