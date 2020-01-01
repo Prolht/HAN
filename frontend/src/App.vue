@@ -3,7 +3,7 @@
     <router-view/>
   </div>
 </template>
-
+<script src="../dist/static/layui/layui.js" charset="utf-8"></script>
 <script>
 export default {
   name: 'App'
@@ -17,7 +17,7 @@ export default {
 html, body {
   margin: 0;
   padding: 0;
-  background:url(../../media/index.jpg) no-repeat;
+  background:url(..\static\index.jpg) no-repeat;
   background-size:100% 100%;
   height:100%;
 }

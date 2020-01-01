@@ -5,6 +5,10 @@ axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? '/' : 'http://l
 export const getProjects = () => axios.get(`/character`)
 // 搜索
 export const getCecEntityTypes = () => axios.get(`/search`)
+
+// 每日一首诗
+export const apigetPoem = () => axios.get(`/poem`)
+
 // character
 export const getItems = () => (characterId) => axios.get(`/character/${characterId}`)
 

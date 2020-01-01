@@ -7,7 +7,7 @@ from django.http import Http404
 from django.db.models import Q
 
 from hanzi.models import ChineseCharacters
-from hanzi.serializers import ChineseCharactersSerializer
+from hanzi.serializers import ChineseCharactersSerializer, ListSerializer
 from Han.settings import get_logger
 
 logger = get_logger()
@@ -61,7 +61,7 @@ class CharactersListView(APIView):
 		pg = MyPageNumberPagination()
 		# 获取分页的数据
 		pg_ = pg.paginate_queryset(queryset=characters, request=request, view=self)
-		serializer = ChineseCharactersSerializer(pg_, many=True)
+		serializer = ListSerializer(pg_, many=True)
 		return Response(serializer.data)
 
 
@@ -124,3 +124,20 @@ def showImg(request):
 	print(content)
 	print(imgs.img_file)
 	return render(request, 'showing.html', content)
+
+
+class PoemView(APIView):
+	def get_object(self, character):
+		try:
+			return ChineseCharacters.objects.get(Q(simplified=character) | Q(traditional=character))
+		except ChineseCharacters.DoesNotExist:
+			logger.error('get_object wrong')
+			raise Http404
+
+	def get(self, request, format=None):
+		characters = self.get_object()
+		pg = MyPageNumberPagination()
+		# 获取分页的数据
+		pg_ = pg.paginate_queryset(queryset=characters, request=request, view=self)
+		serializer = ListSerializer(pg_, many=True)
+		return Response(serializer.data)

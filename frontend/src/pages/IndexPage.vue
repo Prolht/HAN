@@ -1,101 +1,98 @@
 <template>
-  <div class="login">
-    <div class="input-container">
-      <span>用户名</span>
-      <el-input
-        class="input"
-        type="text"
-        placeholder="请输入内容"
-        @keyup.enter.native="login"
-        v-model="username">
-      </el-input>
-    </div>
-    <div class="input-container">
-      <span>密码</span>
-      <el-input
-        class="input"
-        type="password"
-        placeholder="请输入内容"
-        @keyup.enter.native="login"
-        v-model="password">
-      </el-input>
-    </div>
-    <el-button class="submit-btn" type="primary" @click="login">登录</el-button>
+<div class="container">
+  <el-card class="box-card">
+      <div class="title">{{title}}</div>
+      <div v-for="(sentence, id) in poem"
+        :key="id" class="poem">
+          {{sentence}}
+      </div>
+  </el-card>
+  <div class="btn">
+   <el-button icon="el-icon-more" round
+  @click="SingleCharacterPage()">探索</el-button>
+    <!-- <el-button>Enter</el-button> -->
   </div>
+   <!-- <el-col :span="6">
+    <el-card shadow="always">
+      <div class="title">{{title}}</div>
+      <div v-for="(sentence, id) in poem"
+        :key="id" class="poem">
+          {{sentence}}
+      </div>
+    </el-card>
+  </el-col> -->
+</div>
 </template>
 
 <script>
-// import {apiAccountLogin} from '@/service/getData'
+import {apigetPoem} from '@/service/apiV2'
 
-// export default {
-//   name: 'LoginPage',
-//   data () {
-//     return {
-//       username: '',
-//       password: ''
-//     }
-//   },
-//   methods: {
-//     login () {
-//       if (this.username === '') {
-//         this.$notify.error({
-//           title: '出错了',
-//           message: '用户名为空',
-//         })
-//         return
-//       }
-//       if (this.password === '') {
-//         this.$notify.error({
-//           title: '出错了',
-//           message: '密码为空',
-//         })
-//         return
-//       }
-
-//       apiAccountLogin(this.username, this.password).then((res) => {
-//         localStorage.setItem('token', res.data.token)
-//         localStorage.setItem('username', this.username)
-
-//         if (this.$route.query.redirect) {
-//           this.$router.push(this.$route.query.redirect)
-//         } else {
-//           this.$router.push({name: 'TasksDashboard'})
-//         }
-//       }).catch((err) => {
-//         var message = '出错了'
-//         try {
-//           message = err.response.data.non_field_errors[0]
-//           message = message === '无法使用提供的认证信息登录。' ? '用户名或密码错误' : message
-//         } catch (e) {}
-//         this.$notify.error({
-//           title: '出错了',
-//           message: message,
-//         })
-//       })
-//     }
-//   }
-// }
+export default {
+  name: 'IndexPage',
+  data () {
+    return {
+      title: '问刘十九',
+      poem: ['绿蚁新醅酒', '红泥小火炉', '晚来天欲雪', '能饮一杯无']
+    }
+  },
+  methods: {
+    // 获取每日一诗
+    getDailyPoem () {
+      apigetPoem().then((res) => {
+        // api 接口的结果
+      }).catch((err) => {
+        console.log(err && err.response)
+      })
+    },
+    SingleCharacterPage () {
+      this.$router.push({
+        name: 'ListPage',
+      })
+    }, // 进入页面
+  },
+  // created: function () {
+  //   this.pageSize = 5
+  //   this.currentPage = 1
+  //   this.getTasksList()
+  // },
+  mounted: function () {
+    this.getDailyPoem()
+  }
+}
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .login {
-    width: 100%;
-    max-width: 300px;
-    margin: 100px auto 0;
+
+  .container {
+    padding: 100px;
   }
-  .input-container {
-    margin: 10px 0;
+  .title{
+    text-align: center;
+    font-size: 45px;
+    font:bolder;
+    margin:7px;
   }
-  .input-container > span {
-    width: 40px;
-    display: inline-block;
+  .poem{
+    text-align: center;
+    font-size: 25px;
+    margin: 2px;
   }
-  .input-container > .input {
-    width: 250px;
+
+  .box-card {
+    width: 500px;
+    font-family: "微软雅黑";
+    border-radius: 6px;
+    position: relative;
+    padding: 70px;
+    margin-left:auto;
+    margin-right: auto;
+    background-color: transparent;
+    /* opacity: 0.7; */
   }
-  .submit-btn {
-    margin: 50px auto;
-    display: block;
+  .btn{
+    padding: 15px;
+    text-align: right;
+    font: bold;
   }
+
 </style>

@@ -1,264 +1,179 @@
 <template>
-  <div>
-    <div>
-      <el-button size="big"
-        @click="getTasksList()">
-        按钮
-      </el-button>
+  <div class="">
+      <base-header></base-header>
+      <div class="other"></div>
       <el-main class="main-container" v-loading="loading">
-        <span
-          class="word"
-          v-for="(item, id) in items"
-          :key="id">
-          {{ item.id }}
-          {{ item.simplified }}
-        </span>
+        <div>
+          <el-table
+            ref="multipleTable"
+             :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+            tooltip-effect="dark"
+            stripe="true"
+            max-height="500"
+            style="width: 100%"
+            @selection-change="handleSelectionChange">
+          <el-table-column
+            type="index"
+            label="序号"
+            width="100">
+          </el-table-column>
+          <el-table-column
+            prop="simplified"
+            label="简体"
+            width="300">
+          </el-table-column>
+          <el-table-column
+            prop="traditional"
+            label="繁体"
+            width="300">
+          </el-table-column>
+          <el-table-column
+            align="right">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            </template>
+          </el-table-column>
+          </el-table>
+          <div style="text-align: center;margin-top: 30px;">
+            <div class="block">
+            <el-pagination class="pagination"
+              :small="Boolean(isMobile)"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[1, 5, 10, 20, 30, 50, 100]"
+              :page-size="pageSize"
+              :layout="isMobile ? 'prev, pager, next' : 'sizes, prev, pager, next, jumper'"
+              :total="totalItems">
+            </el-pagination>
+        </div>
+          </div>
+        </div>
       </el-main>
     </div>
-  <div id="demo7"></div>
-  <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-    <legend>自定义排版</legend>
-  </fieldset>
-  <div id="demo8"></div>
-  <div id="demo9"></div>
-  <div id="demo10"></div>
-  <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-    <legend>自定义每页条数的选择项</legend>
-  </fieldset>
-  </div>
 </template>
-<script src="../../dist/static/layui/layui.js" charset="utf-8"></script>
+
 <script>
-  layui.use(['laypage', 'layer'], function (){
-    var laypage = layui.laypage
-    ,layer = layui.layer;
-    //总页数低于页码总数
-    laypage.render({
-      elem: 'demo0'
-      ,count: 50 //数据总数
-    });
-    //总页数大于页码总数
-    laypage.render({
-      elem: 'demo1'
-      ,count: 70 //数据总数
-      ,jump: function(obj){
-        console.log(obj)
-      }
-    });
-    //自定义样式
-    laypage.render({
-      elem: 'demo2'
-      ,count: 100
-      ,theme: '#1E9FFF'
-    });
-    laypage.render({
-      elem: 'demo2-1'
-      ,count: 100
-      ,theme: '#FF5722'
-    });
-    laypage.render({
-      elem: 'demo2-2'
-      ,count: 100
-      ,theme: '#FFB800'
-    });
-
-    //自定义首页、尾页、上一页、下一页文本
-    laypage.render({
-      elem: 'demo3'
-      ,count: 100
-      ,first: '首页'
-      ,last: '尾页'
-      ,prev: '<em>←</em>'
-      ,next: '<em>→</em>'
-    });
-
-    //不显示首页尾页
-    laypage.render({
-      elem: 'demo4'
-      ,count: 100
-      ,first: false
-      ,last: false
-    });
-
-    //开启HASH
-    laypage.render({
-      elem: 'demo5'
-      ,count: 500
-      ,curr: location.hash.replace('#!fenye=', '') //获取hash值为fenye的当前页
-      ,hash: 'fenye' //自定义hash值
-    });
-
-    //只显示上一页、下一页
-    laypage.render({
-      elem: 'demo6'
-      ,count: 50
-      ,layout: ['prev', 'next']
-      ,jump: function(obj, first){
-        if(!first){
-          layer.msg('第 '+ obj.curr +' 页');
-        }
-      }
-    });
-
-    //完整功能
-    laypage.render({
-      elem: 'demo7'
-      ,count: 100
-      ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
-      ,jump: function(obj){
-        console.log(obj)
-      }
-    });
-
-    //自定义排版
-    laypage.render({
-      elem: 'demo8'
-      ,count: 1000
-      ,layout: ['limit', 'prev', 'page', 'next']
-    });
-    laypage.render({
-      elem: 'demo9'
-      ,count: 1000
-      ,layout: ['prev', 'next', 'page']
-    });
-    laypage.render({
-      elem: 'demo10'
-      ,count: 1000
-      ,layout: ['page', 'count']
-    });
-
-    //自定义每页条数的选择项
-    laypage.render({
-      elem: 'demo11'
-      ,count: 1000
-      ,limit: 100
-      ,limits: [100, 300, 500]
-    });
-
-    //将一段数组分页展示
-    //测试数据
-    var data = [
-      '北京',
-      '上海',
-      '广州',
-      '深圳',
-      '杭州',
-      '长沙',
-      '合肥',
-      '宁夏',
-      '成都',
-      '西安',
-      '南昌',
-      '上饶',
-      '沈阳',
-      '济南',
-      '厦门',
-      '福州',
-      '九江',
-      '宜春',
-      '赣州',
-      '宁波',
-      '绍兴',
-      '无锡',
-      '苏州',
-      '徐州',
-      '东莞',
-      '佛山',
-      '中山',
-      '成都',
-      '武汉',
-      '青岛',
-      '天津',
-      '重庆',
-      '南京',
-      '九江',
-      '香港',
-      '澳门',
-      '台北'
-    ];
-    //调用分页
-    laypage.render({
-      elem: 'demo20'
-      ,count: data.length
-      ,jump: function(obj){
-        //模拟渲染
-        document.getElementById('biuuu_city_list').innerHTML = function(){
-          var arr = []
-          ,thisData = data.concat().splice(obj.curr*obj.limit - obj.limit, obj.limit);
-          layui.each(thisData, function(index, item){
-            arr.push('<li>'+ item +'</li>');
-          });
-          return arr.join('');
-        }();
-      }
-    });
-  });
-
 import {apiGetCharactersList} from '@/service/apiV2'
+// import BaseHeader from '@/components/BaseHeader'
 
 export default {
   name: 'ListPage',
   data () {
     return {
-      currentPage: 3,
-      pageSize: 4,
-      // currentPage: parseInt(this.$route.params.currentPage),
-      // pageSize: parseInt(this.$route.params.pageSize),
-      items: [],
-      loading: false,
+      currentPage: parseInt(this.$route.params.currentPage),
+      pageSize: parseInt(this.$route.params.pageSize),
       simplified: '',
+      tableData: [],
+      search: '',
+      multipleSelection: [],
+      total: 2,
+      isMobile: false,
+      totalItems: this.currentPage * this.pageSize,
+      // totalItems : 2,
     }
   },
   methods: {
+    /**
+     * 重置数据
+     */
+    resetData () {
+      this.tableData = []
+    },
+
+    // 获取文字列表
     getTasksList () {
+      this.loading = true
       apiGetCharactersList(this.currentPage, this.pageSize).then((res) => {
-        this.items = res.data
-        console.log(this.items)
+        this.loading = false
+        this.tableData = res.data
       }).catch((err) => {
         console.log(err && err.response)
-        try {
-          this.$notify.error({
-            title: '出错了',
-            message: err.response.statusText,
-          })
-        } catch (e) {
-          this.$notify.error({
-            title: '出错了',
-            message: '出错了',
-          })
-        }
       })
     },
+
+    handleEdit () {},
+    handleSizeChange (pageSize) {
+      this.pageSize = pageSize
+      this.currentPage = 1
+      this.getTasksList()
+    },
+    handleCurrentChange (currentPage) {
+      this.currentPage = currentPage
+      this.getTasksList()
+    },
+
+    handleSelectionChange () {
+    },
+    handleIndexJump () {
+      var num = parseInt(this.indexInp)
+      if (!isNaN(num) && num > 0 && num <= this.totalItems) {
+        this.indexInp = num
+        var jumpPage = Math.floor((num - 1) / this.pageSize) + 1
+        if (jumpPage === this.currentPage) {
+          this.goIndex()
+        } else {
+          this.handleCurrentChange(jumpPage)
+        }
+      } else {
+        this.indexInp = ''
+        this.$notify.error({
+          title: '序号有误',
+          message: '输入序号有误，非数字或超过上下限',
+        })
+      }
+    },
+  },
+  // created: function () {
+  //   this.pageSize = 5
+  //   this.currentPage = 1
+  //   this.getTasksList()
+  // },
+  mounted: function () {
+    this.pageSize = 5
+    this.currentPage = 1
+    this.getTasksList()
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .login {
+  .other {
+    height: 150px;
+  }
+  .main-container {
     width: 100%;
-    max-width: 300px;
-    margin: 100px auto 0;
+    max-width: 1200px;
+    margin: 1px auto 0;
   }
-  .input-container {
-    margin: 10px 0;
+  .table-text-blue{
+  color: rgb(3, 3, 5);
+  cursor:pointer;
   }
-  .input-container > span {
-    width: 50px;
-    display: inline-block;
+  .table-text-gray{
+    color: #9132eb;
   }
-  .input-container > .input {
-    width: 240px;
+  .el-table th.is-leaf{
+    background: #9132eb;
+    border-bottom: none;
   }
-  .submit-btn {
-    margin: 10px auto;
-    display: block;
+  .el-table--border th{
+    border-color:#FFF;
+    font-weight: normal;
   }
-  .id{
-    color: black;
-    font:100;
+  .el-table--border{
+    border:none;
   }
-  .word{
-    color:blue
+  .el-table,.el-table thead{
+    color:rgb(5, 3, 7);
   }
+  .el-table--border::after, .el-table--group::after{
+    background-color: #fff;
+  }
+  .el-table th, .el-table tr {
+    background-color: transparent;
+    }
 </style>
