@@ -5,8 +5,8 @@ from hanzi import views
 
 
 urlpatterns = [
-    url(r'^characters/$', views.CharactersListView.as_view()),
-    url(r'^characters/(?P<id>[0-9]+)/$', views.CharactersView.as_view()),
+    url(r'^list/$', views.CharactersListView.as_view()), # 列表
+    url(r'^character/', views.CharacterView.as_view()),
 	url(r'^search/', views.CharactersSearchView.as_view()),
 	url(r'^upload/', views.uploadImg),
 	url(r'^show/', views.showImg),

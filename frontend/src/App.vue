@@ -3,7 +3,6 @@
     <router-view/>
   </div>
 </template>
-<script src="../dist/static/layui/layui.js" charset="utf-8"></script>
 <script>
 export default {
   name: 'App'

@@ -35,18 +35,21 @@ class MyPageNumberPagination(PageNumberPagination):  # 分页
     page_query_param = "page"
 
 
-class CharactersView(APIView):
-	def get_object(self, id):
+class CharacterView(APIView):
+	def get_object(self, character):
 		try:
-			return ChineseCharacters.objects.get(id=id)
+			return ChineseCharacters.objects.get(Q(simplified=character) | Q(traditional=character))
 		except ChineseCharacters.DoesNotExist:
 			logger.error('get_object wrong')
 			raise Http404
 
-	def get(self, request, id, format=None):
-		characters = self.get_object(id)
-		serializer = ChineseCharactersSerializer(characters)
+	def post(self, request, format=None):
+		character = request.data['character']
+		print(character)
+		character = self.get_object(character)
+		serializer = ChineseCharactersSerializer(character)
 		return Response(serializer.data)
+
 
 class CharactersListView(APIView):
 	def get_object(self):

@@ -4,7 +4,6 @@ import IndexPage from '@/pages/IndexPage'
 import SearchPage from '@/pages/SearchPage'
 import SinglePage from '@/pages/SinglePage'
 import ListPage from '@/pages/ListPage'
-// import CecLabelPage from '@/pages/LabelPage/CecLabelPage'
 import PageNotFound from '@/pages/PageNotFound'
 
 Vue.use(Router)
@@ -23,7 +22,7 @@ const router = new Router({
       component: SearchPage
     },
     {
-      path: '/character:',
+      path: '/character',
       name: 'SinglePage', // 单个汉字 复用search接口
       component: SinglePage,
     },
