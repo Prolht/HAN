@@ -12,4 +12,7 @@ export const apigetPoem = () => axios.get(`/poem`)
 export const apiSearch = (character, israndom) => axios.post('/api/search/', {character, israndom})
 
 // 获取汉字列表
-export const apiGetCharactersList = (currentPage, pageSize) => axios.get(`/api/characters/?page=${currentPage}&size=${pageSize}`)
+export const apiGetCharactersList = (currentPage, pageSize) => axios.get(`/api/list/?page=${currentPage}&size=${pageSize}`)
+
+// TODO实现随机展示
+export const apiUpload = (character, israndom) => axios.post('/api/upload/', {character, israndom})

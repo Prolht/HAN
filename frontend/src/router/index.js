@@ -4,6 +4,7 @@ import IndexPage from '@/pages/IndexPage'
 import SearchPage from '@/pages/SearchPage'
 import SinglePage from '@/pages/SinglePage'
 import ListPage from '@/pages/ListPage'
+import EditPage from '@/pages/EditPage'
 import PageNotFound from '@/pages/PageNotFound'
 
 Vue.use(Router)
@@ -30,6 +31,11 @@ const router = new Router({
       path: '/list',
       name: 'ListPage',
       component: ListPage,
+    },
+    {
+      path: '/edit',
+      name: 'EditPage',
+      component: EditPage,
     },
     {
       path: '*',
