@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'o*c4*u%swq+))gqwp(0!yc7n67x*!f#9$xq3#52t5px*mj7zxi'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -136,7 +136,7 @@ CORS_ALLOW_CREDENTIALS = True  # 指明在跨域访问中，后端是否支持�
 STATIC_URL = '/static/'
 
 # LOCAL SETTINGS
-# from .local_settings import *
+from .local_settings import *
 
 # Customer Log
 import logging
