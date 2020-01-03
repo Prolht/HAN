@@ -38,6 +38,11 @@
         <div>{{allusion}}</div>
       </div>
     </el-card>
+    <div class="btn">
+      <el-button icon="el-icon-more" round
+      @click="ListPage()">更多</el-button>
+        <!-- <el-button>Enter</el-button> -->
+  </div>
   </div>
 </template>
 
@@ -79,9 +84,19 @@ export default {
         console.log(err && err.response)
       })
     },
+    ListPage () {
+      this.$router.push({
+        name: 'ListPage',
+      })
+    }, // 进入页面
   },
   mounted: function () {
-    this.character = '声'
+    var simplified = this.$route.params.simplified
+    if (simplified) {
+      this.character = simplified
+    } else {
+      this.character = '声'
+    }
     this.getCharacter()
   }
 }
@@ -125,4 +140,9 @@ export default {
     .block1{
       float: left;
     }
+    .btn{
+    padding: 15px;
+    text-align: right;
+    font: bold;
+  }
 </style>
