@@ -5,7 +5,7 @@ from hanzi import views
 
 
 urlpatterns = [
-    url(r'^list/$', views.CharactersListView.as_view()), # 列表
+    url(r'^list/$', views.CharactersListView.as_view()),  # 列表
     url(r'^character/', views.CharacterView.as_view()),
 	url(r'^search/', views.CharactersSearchView.as_view()),
 	url(r'^upload/', views.uploadImg),

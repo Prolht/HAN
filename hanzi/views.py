@@ -109,7 +109,7 @@ from hanzi.models import ChineseCharacters
 
 def uploadImg(request):
 	if request.method == 'POST':
-		simplified = request.data.get('sim')
+		simplified = request.data.get('simplified')
 		print(simplified)
 		img = request.FILES.get('img')
 		if img.size and img.size > 1 * 1024 * 1024:
