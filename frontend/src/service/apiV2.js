@@ -15,4 +15,4 @@ export const apiSearch = (character, israndom) => axios.post('/api/search/', {ch
 export const apiGetCharactersList = (currentPage, pageSize) => axios.get(`/api/list/?page=${currentPage}&size=${pageSize}`)
 
 // TODO实现随机展示
-export const apiUpload = (character, israndom) => axios.post('/api/upload/', {character, israndom})
+// export const apiUpload = (character, israndom) => axios.post('/api/upload/', {character, israndom})
