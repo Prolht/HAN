@@ -136,7 +136,10 @@ CORS_ALLOW_CREDENTIALS = True  # 指明在跨域访问中，后端是否支持�
 STATIC_URL = '/static/'
 
 # LOCAL SETTINGS
-from .local_settings import *
+try:
+    from .local_settings import *  # noqa
+except ImportError:
+    pass
 
 # Customer Log
 import logging
