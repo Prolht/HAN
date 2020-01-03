@@ -1,0 +1,17 @@
+asgiref==3.2.3
+beautifulsoup4==4.8.2
+certifi==2019.11.28
+chardet==3.0.4
+Django==3.0.1
+django-cors-headers==3.2.0
+django-filter==2.2.0
+djangorestframework==3.11.0
+idna==2.8
+Pillow==6.2.1
+pypinyin==0.36.0
+pytz==2019.3
+requests==2.22.0
+selenium==3.141.0
+soupsieve==1.9.5
+sqlparse==0.3.0
+urllib3==1.25.7
