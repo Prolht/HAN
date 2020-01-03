@@ -33,7 +33,7 @@
 
 <script>
 
-import {apiUpload} from '@/service/apiV2'
+// import {apiUpload} from '@/service/apiV2'
 // import BaseHeader from '@/components/BaseHeader'
 export default {
   data () {
