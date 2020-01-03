@@ -46,7 +46,7 @@ export default {
     },
     SingleCharacterPage () {
       this.$router.push({
-        name: 'ListPage',
+        name: 'SinglePage',
       })
     }, // 进入页面
   },
