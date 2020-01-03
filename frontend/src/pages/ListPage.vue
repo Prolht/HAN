@@ -3,38 +3,40 @@
       <base-header></base-header>
       <div class="other"></div>
       <el-main class="main-container" v-loading="loading">
-        <div>
+        <div class="table-div">
           <el-table
             ref="multipleTable"
              :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
             tooltip-effect="dark"
-            stripe="true"
+            stripe
             max-height="500"
             style="width: 100%"
-            @selection-change="handleSelectionChange">
+            @row-contextmenu="handleEdit"
+            @row-click="handleRowChange">
+            <!-- @selection-change="handleSelectionChange" -->
           <el-table-column
             type="index"
             label="序号"
-            width="100">
+            width="100px;">
           </el-table-column>
           <el-table-column
             prop="simplified"
             label="简体"
-            width="300">
+            width="350">
           </el-table-column>
           <el-table-column
             prop="traditional"
             label="繁体"
-            width="300">
+            width="350">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             align="right">
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                @click="">编辑</el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           </el-table>
           <div style="text-align: center;margin-top: 30px;">
             <div class="block">
@@ -94,7 +96,13 @@ export default {
       })
     },
 
-    handleEdit () {},
+    handleEdit (row, event, column) {
+      console.log(row.simplified)
+      this.$router.push({
+        name: 'EditPage',
+        params: { simplified: row.simplified },
+      })
+    },
     handleSizeChange (pageSize) {
       this.pageSize = pageSize
       this.currentPage = 1
@@ -105,8 +113,13 @@ export default {
       this.getTasksList()
     },
 
-    handleSelectionChange () {
-    },
+    handleRowChange (row, event, column) {
+      this.$router.push({
+        name: 'SinglePage',
+        params: { simplified: row.simplified },
+      })
+    }, // 进入页面
+
     handleIndexJump () {
       var num = parseInt(this.indexInp)
       if (!isNaN(num) && num > 0 && num <= this.totalItems) {
@@ -141,6 +154,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.table-div{
+  width: 800px;
+  position: relative;
+  margin-left:auto;
+  margin-right: auto;
+}
   .other {
     height: 150px;
   }
