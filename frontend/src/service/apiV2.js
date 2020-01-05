@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? 'http://localhost:8000/han' : 'http://localhost:8000'
+axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? '/han' : 'http://localhost:8000'
 // 获取文字列表
 export const apipostCharacter = (character) => axios.post(`api/character/`, {character})
 
