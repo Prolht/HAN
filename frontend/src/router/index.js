@@ -24,7 +24,7 @@ const router = new Router({
     },
     {
       path: '/character',
-      name: 'SinglePage', // 单个汉字 复用search接口
+      name: 'SinglePage',
       component: SinglePage,
     },
     {
