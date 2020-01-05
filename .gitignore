@@ -91,5 +91,5 @@ ENV/
 db.sqlite3
 .idea
 .vscode
-.txt
+hanzi_list.txt
 /helper
