@@ -81,9 +81,17 @@ WSGI_APPLICATION = 'Han.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'banco1',
+        'USER': 'root',
+        'PASSWORD': 'c^70UPUEZa',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+		'OPTIONS': {
+				'sql_mode': 'traditional',
+				#"init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+				'charset': 'utf8'
+        },
 }
 
 
@@ -141,7 +149,7 @@ STATIC_URL = '/static/'
 
 # LOCAL SETTINGS
 try:
-    from .local_settings import *  # noqa
+    from .local_settings import *
 except ImportError:
     pass
 
@@ -158,7 +166,7 @@ def get_logger():
         __format_str = "%(asctime)s %(levelname).1s [%(filename)s:%(lineno)s] %(message)s"
         _g_logger = logging.getLogger()
         # stream header
-        logging.basicConfig(filename='my.log')  # 制定log文件的存放位置
+        logging.basicConfig(filename='app.log')  # 制定log文件的存放位置
         formater = logging.Formatter(__format_str, __datetime)
         handler = logging.StreamHandler()
         handler.setFormatter(formater)
