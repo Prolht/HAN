@@ -1,6 +1,7 @@
 import sys
 import os
 import codecs
+import json
 
 import django
 from pypinyin import pinyin as py
@@ -49,18 +50,99 @@ def insert_img():
 	all_file = [fi[0] for fi in all_files]
 	return all_file
 
-	# for i in all_file:
-	# 	try:
-	# 		img = model.objects.get(Q(simplified=i[0]) | Q(traditional=i[0]))
-	# 		img.img_file = 'cha/' + i
-	# 		img.save()
-	# 	except Exception as e:
-	# 		pass
+
+def import_songci(songci):
+	querysetlist = []
+	ci_base_dir = r'H:\Google\chinese-poetry-master\ci'
+	ci_dirs = list()
+	for ci_dir in os.listdir(ci_base_dir):
+		if 'song' in ci_dir and 'ci' in ci_dir:
+			ci_dir = ci_base_dir + '\\' + ci_dir
+			with codecs.open(ci_dir, encoding='utf-8', mode='r') as ff:
+				ci = json.load(ff)
+				for f in ci:
+					print(f)
+					querysetlist.append(songci(
+						author=f['author'],
+						rhythmic=f['rhythmic'],
+						content=''.join(f['paragraphs']),
+					))
+	songci.objects.bulk_create(querysetlist)
+
+
+def import_songshi(shi):
+	querysetlist = []
+	ci_base_dir = r'H:\Google\chinese-poetry-master\json'
+	ci_dirs = list()
+	for ci_dir in os.listdir(ci_base_dir):
+		if 'song' in ci_dir and 'poet' in ci_dir:
+			ci_dir = ci_base_dir + '\\' + ci_dir
+			try:
+				with codecs.open(ci_dir, encoding='utf-8', mode='r') as ff:
+					ci = json.load(ff)
+					for f in ci:
+						if len(f['title']) < 200 and len(f['title']) < 50:
+							querysetlist.append(shi(
+								author=f['author'],
+								title=f['title'],
+								content=''.join(f['paragraphs']),
+								dynasty ='宋',
+							))
+			except Exception as e:
+				print(e)
+	shi.objects.bulk_create(querysetlist)
+
+
+def import_tangshi(shi):
+	querysetlist = []
+	ci_base_dir = r'H:\Google\chinese-poetry-master\json'
+	ci_dirs = list()
+	for ci_dir in os.listdir(ci_base_dir):
+		if 'tang' in ci_dir and 'poet' in ci_dir:
+			ci_dir = ci_base_dir + '\\' + ci_dir
+			try:
+				with codecs.open(ci_dir, encoding='utf-8', mode='r') as ff:
+					ci = json.load(ff)
+					for f in ci:
+						if len(f['title']) < 200 and len(f['title']) < 50:
+							querysetlist.append(shi(
+								author=f['author'],
+								title=f['title'],
+								content=''.join(f['paragraphs']),
+								dynasty ='唐',
+							))
+			except Exception as e:
+				print(e)
+	shi.objects.bulk_create(querysetlist)
+
+def import_shijing(shi):
+	querysetlist = []
+	ci_dir = r'H:\Google\chinese-poetry-master\shijing\shijing.json'
+	try:
+		with codecs.open(ci_dir, encoding='utf-8', mode='r') as ff:
+			ci = json.load(ff)
+			for f in ci:
+				if len(f['title']) < 100 and len(f['title']) < 10:
+					querysetlist.append(shi(
+						section=f['section'],
+						title=f['title'],
+						content=''.join(f['content']),
+						chapter =f['chapter'],
+					))
+	except Exception as e:
+		print(e)
+	shi.objects.bulk_create(querysetlist)
 
 
 if __name__ == "__main__":
 	from hanzi.models import ChineseCharacters
+	# from hanzi.models import SongCi
+	# from hanzi.models import Shi
+	# from hanzi.models import ShiJing
 	with codecs.open(BASE_DIR + '\\hanzi_list.txt', encoding='utf-8', mode='r') as f:
 			data = f.readlines()
 	dump_data(ChineseCharacters, list(set(data)))
-	# get_pinyin('和')
+	# import_songci(SongCi)
+	# import_songshi(Shi)
+	# import_tangshi(Shi)
+	# import_shijing(ShiJing)
