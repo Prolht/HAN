@@ -11,3 +11,29 @@ class ChineseCharacters(models.Model):
 	allusion = models.TextField(blank=True, default='', verbose_name='文字典故')  # 典故
 	pinyin = models.CharField(max_length=20, blank=True, default='', verbose_name='拼音')  # 拼音
 	img_file = models.ImageField(default='', upload_to="cha/", blank=True, verbose_name='存储位置')
+
+
+class SongCi(models.Model):
+	id = models.AutoField(primary_key=True)
+	author = models.CharField(max_length=10, blank=True, default='', verbose_name='作者')
+	rhythmic = models.CharField(max_length=10, blank=True, default='', verbose_name='词牌名')
+	content = models.TextField(blank=True, default='', verbose_name='词内容')
+	dynasty = models.CharField(max_length=10, blank=True, default='宋', verbose_name='朝代')
+	category = models.CharField(max_length=10, blank=True, choices=(('shi', '诗'), ('ci', '词')))
+
+
+class Shi(models.Model):
+	id = models.AutoField(primary_key=True)
+	author = models.CharField(max_length=10, blank=True, default='', verbose_name='作者')
+	title = models.CharField(max_length=10, blank=True, default='', verbose_name='诗名')
+	content = models.TextField(blank=True, default='', verbose_name='诗内容')
+	chapter = models.CharField(max_length=10, blank=True, default='', verbose_name='篇章')
+	section = models.TextField(blank=True, default='', verbose_name='卷')
+
+
+class ShiJing(models.Model):
+	id = models.AutoField(primary_key=True)
+	author = models.CharField(max_length=10, blank=True, default='', verbose_name='作者')
+	title = models.CharField(max_length=10, blank=True, default='', verbose_name='诗名')
+	content = models.TextField(blank=True, default='', verbose_name='诗经内容')
+	dynasty = models.CharField(max_length=10, blank=True, default='', verbose_name='朝代')
