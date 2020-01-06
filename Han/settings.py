@@ -139,7 +139,7 @@ MEDIA_URL = '/media/'
 # 跨域
 CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:8080',
-    'http://localhost:8080', #凡是出现在白名单中的域名，都可以访问后端接口
+    'http://localhost:8080',  # 凡是出现在白名单中的域名，都可以访问后端接口
 )
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True  # 指明在跨域访问中，后端是否支持对cookie的操作。
