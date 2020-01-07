@@ -41,6 +41,7 @@ export default {
       apigetPoem().then((res) => {
         this.title = res.data.title
         this.poem = res.data.content
+        console.log(this.poem)
         // api 接口的结果
       }).catch((err) => {
         console.log(err && err.response)

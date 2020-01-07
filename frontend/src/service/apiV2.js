@@ -5,7 +5,7 @@ axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? '/han' : 'http:
 export const apipostCharacter = (character) => axios.post(`api/character/`, {character})
 
 // 每日一首诗
-export const apigetPoem = () => axios.get(`/poem`)
+export const apigetPoem = () => axios.get(`/api/poem`)
 
 // 搜索随机
 // TODO实现随机展示
