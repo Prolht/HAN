@@ -31,14 +31,16 @@ export default {
   name: 'IndexPage',
   data () {
     return {
-      title: '问刘十九',
-      poem: ['绿蚁新醅酒', '红泥小火炉', '晚来天欲雪', '能饮一杯无']
+      title: '',
+      poem: ''
     }
   },
   methods: {
     // 获取每日一诗
     getDailyPoem () {
       apigetPoem().then((res) => {
+        this.title = res.data.title
+        this.poem = res.data.content
         // api 接口的结果
       }).catch((err) => {
         console.log(err && err.response)

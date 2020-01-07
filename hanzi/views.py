@@ -12,6 +12,7 @@ from django.db.models import Q
 from hanzi.models import ChineseCharacters, Poem
 from hanzi.serializers import ChineseCharactersSerializer, ListSerializer, PoemSerializer
 from Han.settings import get_logger
+from helper.tools import convert2list
 
 logger = get_logger()
 
@@ -155,4 +156,7 @@ class PoemView(APIView):
 		daily_poem = self.get_object(seed)
 		# 获取分页的数据
 		daily_poem_serializer = PoemSerializer(daily_poem)
-		return Response(daily_poem_serializer.data)
+		content = convert2list(daily_poem_serializer.data['content'])
+		res = {'title': daily_poem_serializer.data['title'], 'content': content}
+		return Response(res)
+		# return Response(daily_poem_serializer.data)
