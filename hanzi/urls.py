@@ -11,6 +11,7 @@ urlpatterns = [
 	url(r'^upload/', views.uploadImg),
 	url(r'^show/', views.showImg),
 	url(r'^update/', views.UpdateView.as_view()),
+	url(r'^poem/', views.PoemView.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -1,3 +1,6 @@
+import datetime
+import random
+
 from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
@@ -6,8 +9,8 @@ from rest_framework.views import APIView
 from django.http import Http404
 from django.db.models import Q
 
-from hanzi.models import ChineseCharacters
-from hanzi.serializers import ChineseCharactersSerializer, ListSerializer
+from hanzi.models import ChineseCharacters, Poem
+from hanzi.serializers import ChineseCharactersSerializer, ListSerializer, PoemSerializer
 from Han.settings import get_logger
 
 logger = get_logger()
@@ -130,17 +133,23 @@ def showImg(request):
 
 
 class PoemView(APIView):
-	def get_object(self, character):
+	def get_object(self, seed):
+		data_obj = Poem.objects.all()
+		poem_num = len(data_obj)
+		# random_group_num = random.randrange(0, int(poem_num / seed))  # 组间随机
+		# random_in_group_num = random.randrange(0, seed)  # 组内随机
+		# random_id = random_group_num * seed + random_in_group_num
+		random_id = seed % poem_num
 		try:
-			return ChineseCharacters.objects.get(Q(simplified=character) | Q(traditional=character))
+			return Poem.objects.filter(id=random_id)
 		except ChineseCharacters.DoesNotExist:
 			logger.error('get_object wrong')
 			raise Http404
 
 	def get(self, request, format=None):
-		characters = self.get_object()
-		pg = MyPageNumberPagination()
+		dat = datetime.datetime.today()
+		seed = int(str(dat.year) + str(dat.month) + str(dat.day))
+		daily_poem = self.get_object(seed)
 		# 获取分页的数据
-		pg_ = pg.paginate_queryset(queryset=characters, request=request, view=self)
-		serializer = ListSerializer(pg_, many=True)
-		return Response(serializer.data)
+		daily_poem_serializer =PoemSerializer(daily_poem)
+		return Response(daily_poem_serializer.data)
