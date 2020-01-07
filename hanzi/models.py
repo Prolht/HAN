@@ -22,7 +22,7 @@ class SongCi(models.Model):
 	category = models.CharField(max_length=10, blank=True, default='词')
 
 
-class Shi(models.Model):
+class Poem(models.Model):
 	id = models.AutoField(primary_key=True)
 	author = models.CharField(max_length=50, blank=True, default='', verbose_name='作者')
 	title = models.CharField(max_length=200, blank=True, default='', verbose_name='诗名')
