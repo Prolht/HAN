@@ -106,6 +106,7 @@ class UpdateView(APIView):
 			logger('update error ', e)
 			raise Http404
 
+
 from django.shortcuts import render
 from hanzi.models import ChineseCharacters
 
@@ -132,17 +133,19 @@ def showImg(request):
 	return render(request, 'showing.html', content)
 
 
+data_obj = Poem.objects.all()  # 预加载诗的model 提升访问速度
+
+
 class PoemView(APIView):
 	def get_object(self, seed):
-		data_obj = Poem.objects.all()
 		poem_num = len(data_obj)
 		# random_group_num = random.randrange(0, int(poem_num / seed))  # 组间随机
 		# random_in_group_num = random.randrange(0, seed)  # 组内随机
 		# random_id = random_group_num * seed + random_in_group_num
 		random_id = seed % poem_num
 		try:
-			return Poem.objects.filter(id=random_id)
-		except ChineseCharacters.DoesNotExist:
+			return data_obj.get(id=random_id)
+		except Poem.DoesNotExist:
 			logger.error('get_object wrong')
 			raise Http404
 
@@ -151,5 +154,5 @@ class PoemView(APIView):
 		seed = int(str(dat.year) + str(dat.month) + str(dat.day))
 		daily_poem = self.get_object(seed)
 		# 获取分页的数据
-		daily_poem_serializer =PoemSerializer(daily_poem)
+		daily_poem_serializer = PoemSerializer(daily_poem)
 		return Response(daily_poem_serializer.data)
