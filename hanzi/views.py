@@ -136,7 +136,7 @@ def showImg(request):
 
 class PoemView(APIView):
 	def get_object(self, seed):
-		poem_num = len(data_obj)
+		poem_num = len(Poem.objects.all())
 		# random_group_num = random.randrange(0, int(poem_num / seed))  # 组间随机
 		# random_in_group_num = random.randrange(0, seed)  # 组内随机
 		# random_id = random_group_num * seed + random_in_group_num
