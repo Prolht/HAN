@@ -134,9 +134,6 @@ def showImg(request):
 	return render(request, 'showing.html', content)
 
 
-data_obj = Poem.objects.all()  # 预加载诗的model 提升访问速度
-
-
 class PoemView(APIView):
 	def get_object(self, seed):
 		poem_num = len(data_obj)
@@ -145,7 +142,7 @@ class PoemView(APIView):
 		# random_id = random_group_num * seed + random_in_group_num
 		random_id = seed % poem_num
 		try:
-			return data_obj.get(id=random_id)
+			return Poem.objects.get(id=random_id)
 		except Poem.DoesNotExist:
 			logger.error('get_object wrong')
 			raise Http404
@@ -154,7 +151,6 @@ class PoemView(APIView):
 		dat = datetime.datetime.today()
 		seed = int(str(dat.year) + str(dat.month) + str(dat.day))
 		daily_poem = self.get_object(seed)
-		# 获取分页的数据
 		daily_poem_serializer = PoemSerializer(daily_poem)
 		content = convert2list(daily_poem_serializer.data['content'])
 		res = {'title': daily_poem_serializer.data['title'], 'content': content}
